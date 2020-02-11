@@ -11,15 +11,9 @@ Maintainer: Nico Katzke <nfkatzke@gmail.com>
 BugReports: https://github.com/nicktz/fmxdat/issues
 Depends:
     R (>= 3.2.1)
-Imports:
-    PerformanceAnalytics
 License: GPL-3
 LazyData: TRUE
 RoxygenNote: 6.1.1
-Suggests:
-    knitr,
-    tbl2xts,
-    rmsfuns
 Repository: CRAN
 NeedsCompilation: yes
 ByteCompile: yes
