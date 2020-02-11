@@ -18,7 +18,7 @@ Some more helper / wrapper functions might be introduced in time.
 
 # Examples
 
-Wherever in the practicals a dataframe is mentioned, this dataframe can now be accessed without the need for an internet connection as followsL
+Wherever in the practicals a dataframe is mentioned, this dataframe can now be accessed without the need for an internet connection as follows:
 
     library(tidyverse)
     library(fmxdat)
