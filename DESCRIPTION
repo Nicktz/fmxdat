@@ -9,6 +9,12 @@ Description: This is a simple wrapper package for the Financial Econometrics cou
     wrapper functions discussed in tutorials. For more information on the package, contact me directly.
 Maintainer: Nico Katzke <nfkatzke@gmail.com>
 BugReports: https://github.com/nicktz/fmxdat/issues
+Imports:
+    rstudioapi, 
+    readr,
+    rmsfuns,
+    rstudioapi,
+    ProjectTemplate
 Depends:
     R (>= 3.2.1)
 License: GPL-3

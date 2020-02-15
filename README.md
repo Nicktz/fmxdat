@@ -25,3 +25,12 @@ now be accessed without the need for an internet connection as follows:
     library(fmxdat)
     df_Use <- fmxdat::BRICSTRI
     df_Use %>% gather(Countries, TRI, -Date)
+
+Creating projects
+-----------------
+
+The following creates a project template that I recommend you use when
+doing any work.
+
+> The README is you diary as you proceed, and your manual when you
+> return to your project in the future.
