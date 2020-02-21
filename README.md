@@ -34,3 +34,8 @@ doing any work.
 
 > The README is you diary as you proceed, and your manual when you
 > return to your project in the future.
+
+Use it as (note - the folder must be empty - you cannot have multiple
+projects in a single folder.):
+
+    make_project(FilePath = "C:/Lets/Go/Now", ProjNam = "Projeesss")
