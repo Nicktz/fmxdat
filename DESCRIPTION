@@ -1,6 +1,6 @@
 Package: fmxdat
-Version: 0.1.6
-Date: 2019-08-29
+Version: 0.1.7
+Date: 2020-02-20
 Type: Package
 Title: Wrapper package for the Financial Econometrics Course
 Authors@R: person("Nico", "Katzke", role = c("aut", "cre"), email = "nfkatzke@gmail.com")
