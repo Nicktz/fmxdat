@@ -17,9 +17,11 @@ rmsfuns::build_path(FilePath)
 cwd <- getwd()
 setwd(FilePath)
 ProjectTemplate::create.project(project.name = ProjNam, merge.strategy = "require.empty", rstudio.project = T, template = "minimal")
-unlink(list.files(FilePath, recursive = T, full.names = T)[!grepl(".Rproj", list.files(FilePath, recursive = T, full.names = T))], recursive = T, force = T )
+
+Del <- list.files(FilePath, full.names = T)[!grepl(".Rproj|README.md", list.files(FilePath, full.names = T))]
+unlink( list.files(FilePath, full.names = T)[!grepl(".Rproj", list.files(FilePath, full.names = T))])
+invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), shell))
 setwd(cwd)
-sapply(as.list(paste0("rm -r ", list.files(file.path( FilePath, ProjNam), full.names = T)[!grepl(".Rproj", list.files(file.path( FilePath, ProjNam), full.names = T))] )), system)
 
 rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "code"))
 rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "bin"))
