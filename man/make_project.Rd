@@ -4,7 +4,7 @@
 \alias{make_project}
 \title{make_project}
 \usage{
-make_project(FilePath, ProjNam)
+make_project(FilePath, ProjNam, Mac = FALSE)
 }
 \arguments{
 \item{FilePath}{Provide the full location path within which the directory should be created.

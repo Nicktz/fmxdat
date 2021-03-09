@@ -11,7 +11,7 @@
 #' make_project("C:/Temp/FinMetrics/Practical1")
 #' @export
 
-make_project <- function(FilePath, ProjNam) {
+make_project <- function(FilePath, ProjNam, Mac = FALSE) {
 
 rmsfuns::build_path(FilePath)
 cwd <- getwd()
@@ -20,7 +20,13 @@ ProjectTemplate::create.project(project.name = ProjNam, merge.strategy = "requir
 
 Del <- list.files(FilePath, full.names = T)[!grepl(".Rproj|README.md", list.files(FilePath, full.names = T))]
 unlink( list.files(FilePath, full.names = T)[!grepl(".Rproj", list.files(FilePath, full.names = T))])
-invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), shell))
+
+if(!Mac){
+  invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), shell))
+} else {
+  invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), system))
+}
+
 setwd(cwd)
 
 rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "code"))
