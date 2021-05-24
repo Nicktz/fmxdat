@@ -1,0 +1,12 @@
+Column,Description
+csh_c,Share of household consumption at current PPPs.
+csh_i,Share of gross capital formation at current PPPs.
+csh_g,Share of government consumption at current PPPs
+csh_x,Share of merchandise exports at current PPPs
+csh_m,Share of merchandise imports at current PPPs
+csh_r,Share of residual trade and GDP statistical discrepancy at current PPPs
+pop,Population
+rgdpe,Real GDP (using chained Purchasing Price Parity values as at 2017)
+hc,"Human capital index, based on years of schooling and returns to education; see Human capital in PWT9."
+avh,Average annual hours worked by persons engaged
+irr,Real internal rate of return.
