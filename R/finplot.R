@@ -25,7 +25,7 @@
 #' @param legend.text.size Adj legend text
 #' @param log.y Apply a log transformation on the y-axis. This is a log base 10 transformation
 #' @examples
-#' g <- ggplot() + geom_line(aes(date, returns, color = Funds)) + theme_fmx
+#' g <- ggplot() + geom_line(aes(date, returns, color = Funds)) + theme_fmx()
 #' finplot(g, x.pct = TRUE)
 #' @export
 #'

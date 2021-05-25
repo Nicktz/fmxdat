@@ -87,6 +87,6 @@ ggplot object
 Plotting aide for Psec plotting functionalities.
 }
 \examples{
-g <- ggplot() + geom_line(aes(date, returns, color = Funds)) + theme_fmx
+g <- ggplot() + geom_line(aes(date, returns, color = Funds)) + theme_fmx()
 finplot(g, x.pct = TRUE)
 }
