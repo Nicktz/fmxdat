@@ -4,20 +4,21 @@
 \alias{make_project}
 \title{make_project}
 \usage{
-make_project(FilePath, ProjNam, Mac = FALSE)
+make_project(FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = FALSE)
 }
 \arguments{
-\item{FilePath}{Provide the full location path within which the directory should be created.
-On a Windows PC, this could e.g. be: 'C:/Temp_Folder/New_Project'}
+\item{FilePath}{Folder location on PC. Default uses clipboard (copied location)}
 
-\item{ProjNam}{Name of the project you want to create, e.g. 'ProjNam'}
-}
-\value{
-Path address just built.
+\item{ProjNam}{Project name Default uses last name of directory.}
+
+\item{Mac}{If using a Mac, set to TRUE. FALSE by default}
+
+\item{Open}{Should the project be opened or not. FALSE by Default}
 }
 \description{
-make_project builds an R folder with a workable template in a given Root directory.
+Creates a new template project folder from a copied location. A Rproject environment with the parent folder will be created. If folder is non-empty, this will return an error (so it won't override a non-empty folder accidentally).
 }
 \examples{
-make_project("C:/Temp/FinMetrics/Practical1")
+# Create a folder, copy its location, and run:
+make_proj_clipboard()
 }

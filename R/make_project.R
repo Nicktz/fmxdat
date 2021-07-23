@@ -1,56 +1,60 @@
 #' @title make_project
-#' @description make_project builds an R folder with a workable template in a given Root directory.
-#' @param FilePath Provide the full location path within which the directory should be created.
-#' On a Windows PC, this could e.g. be: 'C:/Temp_Folder/New_Project'
-#' @param ProjNam Name of the project you want to create, e.g. 'ProjNam'
-#' @return Path address just built.
-#' @importFrom rmsfuns build_path
-#' @importFrom rstudioapi openProject
-#' @importFrom ProjectTemplate create.project
+#' @description Creates a new template project folder from a copied location. A Rproject environment with the parent folder will be created. If folder is non-empty, this will return an error (so it won't override a non-empty folder accidentally).
+#' @param FilePath Folder location on PC. Default uses clipboard (copied location)
+#' @param ProjNam Project name Default uses last name of directory.
+#' @param Mac If using a Mac, set to TRUE. FALSE by default
+#' @param Open Should the project be opened or not. FALSE by Default
 #' @examples
-#' make_project("C:/Temp/FinMetrics/Practical1")
+#' # Create a folder, copy its location, and run:
+#' make_proj_clipboard()
 #' @export
+make_project <- function (FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = FALSE){
 
-make_project <- function(FilePath, ProjNam, Mac = FALSE) {
+  if(is.null(FilePath)) {
 
-rmsfuns::build_path(FilePath)
-cwd <- getwd()
-setwd(FilePath)
-ProjectTemplate::create.project(project.name = ProjNam, merge.strategy = "require.empty", rstudio.project = T, template = "minimal")
+    FilePath <- normalizePath(readClipboard(),winslash = "/")
+    if(length(list.files(FilePath)) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
+    rootloc <- paste(strsplit(path.expand(FilePath), "/")[[1]][-length(strsplit(path.expand(FilePath), "/")[[1]])], collapse = "/")
 
-Del <- list.files(FilePath, full.names = T)[!grepl(".Rproj|README.md", list.files(FilePath, full.names = T))]
-unlink( list.files(FilePath, full.names = T)[!grepl(".Rproj", list.files(FilePath, full.names = T))])
+    ProjNam <- paste0(strsplit(FilePath, "/")[[1]][length(strsplit(FilePath, "/")[[1]])], ".Rproj")
+    ProjNam_noproj <- gsub( ".Rproj", "", ProjNam)
+    build_in_case <- rmsfuns::build_path(FilePath)
 
-if(!Mac){
-  invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), shell))
-} else {
-  invisible(sapply(glue::glue("rmdir /s /q \"{Del}\" "), system))
-}
+  } else {
+    if(is.null(ProjNam)) stop("\n\nFilePath specified, with no ProjNam. Please specify your project name explicitly. You could also just use the clipboard and run the function with no filepath or project name specified.")
+    rootloc <- FilePath
+    FilePath <- paste0( FilePath, "/", ProjNam)
+    if(length(list.files( FilePath ) ) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
 
-setwd(cwd)
+    ProjNam_noproj <- gsub( ".Rproj", "", ProjNam)
+  }
 
-rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "code"))
-rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "bin"))
-rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "settings"))
-rmsfuns::build_path(FilePath = file.path(FilePath, ProjNam, "data"))
+  cwd <- getwd()
+  setwd( rootloc )
+  ProjectTemplate::create.project(project.name = ProjNam_noproj,
+                                  merge.strategy = "require.empty", rstudio.project = T,
+                                  template = "minimal")
 
-writeLines("# Some deletable function:
+  setwd( FilePath )
 
-example_function <- function(x, y){
+  Del <- list.files(FilePath, full.names = T)[!grepl(".Rproj", list.files(FilePath, full.names = T))]
+  unlink(Del)
 
-print('you can delete me please...')
+  if(!Mac){
+    invisible(sapply(glue::glue("rmdir /s /q \"{Del[!grepl('.md', Del)]}\" "), shell))
 
-Result = x * y
+  } else {
+    invisible(sapply(glue::glue("rmdir /s /q \"{Del[!grepl('.md', Del)]}\" "), system))
+  }
 
-Result
+  setwd(cwd)
 
-}
-"
-, con = paste0( file.path( FilePath, ProjNam), "/code/example_function.R"))
+  rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "code"))
+  rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "bin"))
+  rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "settings"))
+  rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "data"))
 
-readr::write_rds( datasets::iris, path = paste0( file.path( FilePath, ProjNam), "/data/flowers.rds") )
-
-writeLines("---
+  writeLines("---
 output:
   md_document:
     variant: markdown_github
@@ -58,48 +62,25 @@ output:
 
 # Purpose
 
-The aim of this folder is to.... (Explain yourself here)
+Purpose of this work folder.
 
-Load in coding scripts
+Ideally store a minimum working example data set in data folder.
+
+Add binary files in bin, and closed R functions in code. Human Readable settings files (e.g. csv) should be placed in settings/
+
 
 ```{r}
 
 rm(list = ls()) # Clean your environment:
 gc() # garbage collection - It can be useful to call gc after a large object has been removed, as this may prompt R to return memory to the operating system.
-library(pacman)
-p_load(tidyverse, rmsfuns)
-
-# Source in all your functions:
-list.files('code/', full.names = T, recursive = T) %>% as.list() %>% walk(~source(.))
-
-Result <- example_function(x = 10, y = 20)
-
-
+library(tidyverse)
+list.files('code/', full.names = T, recursive = T) %>% .[grepl('.R', .)] %>% as.list() %>% walk(~source(.))
 ```
 
+", con = paste0( file.path( rootloc, ProjNam_noproj), "/README.rmd"))
 
-# Data loading
+  if(Open) rstudioapi::openProject(path = file.path( FilePath, ProjNam), newSession = TRUE)
 
-Loading in some really crucial data here, and then producing a beautiful plot:
+  message( glue::glue("Folder created in:\n\n{FilePath}/{ProjNam}\n\n" ))
 
-```{r}
-
-df_flowers <- read_rds('data/flowers.rds')
-
-ggplot(df_flowers) +
-    geom_point(aes(Petal.Length, Petal.Width, color = Species) ) +
-               labs(title = 'Amazing plot', y = 'petal widths', x = 'petal lengths')
-
-```
-
-# Lastly
-
-* Notice that the 'bin' folder is used for binary files (pdfs, word docs, etc)
-
-* 'settings' folder should be used only for human readable files that are used as user input settings files.
-"
-, con = paste0( file.path( FilePath, ProjNam), "/README.rmd"))
-
-rstudioapi::openProject(path = file.path( FilePath, ProjNam), newSession = TRUE)
-
-  }
+}
