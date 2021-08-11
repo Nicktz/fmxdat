@@ -17,9 +17,5 @@
 #' @export
 #'
 safe_year_min <- function(datesel, N = 2){
-  YMSel = format(datesel, "%Y%B")
-  data.frame(date = rmsfuns::dateconverter(StartDate = ymd(19900101), EndDate = ymd(20500101), Transform = 'calendarEOM')) %>%
-    mutate(YM = format(date, "%Y%B")) %>% mutate(cons = ifelse(YM == YMSel, "Keep", NA)) %>% tidyr::fill(cons, .direction = "up") %>%
-    filter(cons == "Keep") %>%
-    tail(N*12 + 1) %>% slice(1) %>% pull(date) + 1
+  floor_date(datesel %m-% months(N*12 - 1), unit = "months")
 }

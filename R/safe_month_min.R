@@ -12,15 +12,10 @@
 #' @param Ra N months back
 #' @examples
 #' library(tidyverse);library(lubridate)
-#' df <- data.frame(date = rmsfuns::dateconverter(StartDate = lubridate::ymd(20200831), EndDate = lubridate::ymd(20210228), Transform = 'calendarEOM'))
+#' df <- data.frame(date = rmsfuns::dateconverter(StartDate = lubridate::ymd(20200131), EndDate = lubridate::ymd(20210228), Transform = 'calendarEOM'))
 #' df %>% filter(date >= safe_month_min(last(date), N = 6))
 #' @export
 #'
 safe_month_min <- function(datesel, N = 6){
-  YMSel = format(datesel, "%Y%B")
-
-  data.frame(date = rmsfuns::dateconverter(StartDate = ymd(19900101), EndDate = ymd(20500101), Transform = 'calendarEOM')) %>%
-    mutate(YM = format(date, "%Y%B")) %>% mutate(cons = ifelse(YM == YMSel, "Keep", NA)) %>% tidyr::fill(cons, .direction = "up") %>%
-    filter(cons == "Keep") %>%
-    tail(N + 1) %>% slice(1) %>% pull(date) + 1
+  floor_date(datesel %m-% months(N-1), unit = "months")
 }

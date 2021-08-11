@@ -24,6 +24,6 @@ df %>% filter(date >= safe_month_min(last(date), N = 6))
 }
 \examples{
 library(tidyverse);library(lubridate)
-df <- data.frame(date = rmsfuns::dateconverter(StartDate = lubridate::ymd(20200831), EndDate = lubridate::ymd(20210228), Transform = 'calendarEOM'))
+df <- data.frame(date = rmsfuns::dateconverter(StartDate = lubridate::ymd(20200131), EndDate = lubridate::ymd(20210228), Transform = 'calendarEOM'))
 df \%>\% filter(date >= safe_month_min(last(date), N = 6))
 }
