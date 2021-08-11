@@ -1,16 +1,12 @@
 #' @title make_project
 #' @description Creates a new template project folder from a copied location. A Rproject environment with the parent folder will be created. If folder is non-empty, this will return an error (so it won't override a non-empty folder accidentally).
-#' @param FilePath Folder location on PC. Default uses clipboard (copied location)
-#' @param ProjNam Project name Default uses last name of directory.
 #' @param Mac If using a Mac, set to TRUE. FALSE by default
 #' @param Open Should the project be opened or not. FALSE by Default
 #' @examples
 #' # Create a folder, copy its location, and run:
-#' make_proj_clipboard()
+#' make_project()
 #' @export
-make_project <- function (FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = FALSE){
-
-  if(is.null(FilePath)) {
+make_project <- function (Mac = FALSE, Open = FALSE){
 
     FilePath <- normalizePath(readClipboard(),winslash = "/")
     if(length(list.files(FilePath)) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
@@ -20,22 +16,11 @@ make_project <- function (FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = F
     ProjNam_noproj <- gsub( ".Rproj", "", ProjNam)
     build_in_case <- rmsfuns::build_path(FilePath)
 
-  } else {
-    if(is.null(ProjNam)) stop("\n\nFilePath specified, with no ProjNam. Please specify your project name explicitly. You could also just use the clipboard and run the function with no filepath or project name specified.")
-    rootloc <- FilePath
-    FilePath <- paste0( FilePath, "/", ProjNam)
-    if(length(list.files( FilePath ) ) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
-
-    ProjNam_noproj <- gsub( ".Rproj", "", ProjNam)
-  }
-
   cwd <- getwd()
   setwd( rootloc )
   ProjectTemplate::create.project(project.name = ProjNam_noproj,
                                   merge.strategy = "require.empty", rstudio.project = T,
                                   template = "minimal")
-
-  setwd( FilePath )
 
   Del <- list.files(FilePath, full.names = T)[!grepl(".Rproj", list.files(FilePath, full.names = T))]
   unlink(Del)
@@ -46,8 +31,6 @@ make_project <- function (FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = F
   } else {
     invisible(sapply(glue::glue("rmdir /s /q \"{Del[!grepl('.md', Del)]}\" "), system))
   }
-
-  setwd(cwd)
 
   rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "code"))
   rmsfuns::build_path(FilePath = file.path(rootloc, ProjNam_noproj, "bin"))

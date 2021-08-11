@@ -4,13 +4,9 @@
 \alias{make_project}
 \title{make_project}
 \usage{
-make_project(FilePath = NULL, ProjNam = NULL, Mac = FALSE, Open = FALSE)
+make_project(Mac = FALSE, Open = FALSE)
 }
 \arguments{
-\item{FilePath}{Folder location on PC. Default uses clipboard (copied location)}
-
-\item{ProjNam}{Project name Default uses last name of directory.}
-
 \item{Mac}{If using a Mac, set to TRUE. FALSE by default}
 
 \item{Open}{Should the project be opened or not. FALSE by Default}
@@ -20,5 +16,5 @@ Creates a new template project folder from a copied location. A Rproject environ
 }
 \examples{
 # Create a folder, copy its location, and run:
-make_proj_clipboard()
+make_project()
 }
