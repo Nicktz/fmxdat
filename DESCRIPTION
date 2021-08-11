@@ -11,6 +11,8 @@ Maintainer: Nico Katzke <nfkatzke@gmail.com>
 BugReports: https://github.com/nicktz/fmxdat/issues
 Imports:
     readr,
+    tidyr,
+    dplyr,
     rmsfuns,
     rstudioapi,
     grid,
