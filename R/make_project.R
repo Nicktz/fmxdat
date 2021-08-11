@@ -2,19 +2,21 @@
 #' @description Creates a new template project folder from a copied location. A Rproject environment with the parent folder will be created. If folder is non-empty, this will return an error (so it won't override a non-empty folder accidentally).
 #' @param Mac If using a Mac, set to TRUE. FALSE by default
 #' @param Open Should the project be opened or not. FALSE by Default
+#' @importFrom rmsfuns build_path
 #' @examples
 #' # Create a folder, copy its location, and run:
 #' make_project()
 #' @export
 make_project <- function (Mac = FALSE, Open = FALSE){
 
-    FilePath <- normalizePath(readClipboard(),winslash = "/")
+    FilePath <- normalizePath(readClipboard(),winslash = "/", mustWork = F)
+    build_in_case <- rmsfuns::build_path(FilePath)
     if(length(list.files(FilePath)) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
     rootloc <- paste(strsplit(path.expand(FilePath), "/")[[1]][-length(strsplit(path.expand(FilePath), "/")[[1]])], collapse = "/")
 
     ProjNam <- paste0(strsplit(FilePath, "/")[[1]][length(strsplit(FilePath, "/")[[1]])], ".Rproj")
     ProjNam_noproj <- gsub( ".Rproj", "", ProjNam)
-    build_in_case <- rmsfuns::build_path(FilePath)
+
 
   cwd <- getwd()
   setwd( rootloc )
