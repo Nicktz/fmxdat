@@ -9,7 +9,13 @@
 #' @export
 make_project <- function (Mac = FALSE, Open = FALSE){
 
-    FilePath <- normalizePath(readClipboard(),winslash = "/", mustWork = F)
+    if(Mac) {
+
+      FilePath <- normalizePath(as.vector(unlist(read.table(pipe("pbpaste"), sep="\t", header=FALSE))))
+
+    } else {
+      FilePath <- normalizePath(readClipboard(),winslash = "/", mustWork = F)
+    }
     build_in_case <- rmsfuns::build_path(FilePath)
     if(length(list.files(FilePath)) > 0 ) stop(glue::glue("\n\nThis folder is non-empty:\n\n{FilePath}\n\nThis function is specifically used for a new, empty folder.\nPlease create a new environment to create template folder in."))
     rootloc <- paste(strsplit(path.expand(FilePath), "/")[[1]][-length(strsplit(path.expand(FilePath), "/")[[1]])], collapse = "/")
