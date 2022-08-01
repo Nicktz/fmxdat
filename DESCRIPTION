@@ -1,6 +1,6 @@
 Package: fmxdat
-Version: 1.0.6
-Date: 2021-08-27
+Version: 1.0.7
+Date: 2022-07-01
 Type: Package
 Title: Wrapper package for the Financial Econometrics Course
 Authors@R: person("Nico", "Katzke", role = c("aut", "cre"), email = "nfkatzke@gmail.com")
@@ -22,7 +22,7 @@ Depends:
     R (>= 3.2.1)
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Repository: CRAN
 NeedsCompilation: yes
 ByteCompile: yes
