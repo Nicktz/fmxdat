@@ -10,6 +10,7 @@
 #' @return N months back
 #' @param Ra date, specified in dataframe as e.g. last(date)
 #' @param Ra N months back
+#' @import lubridate
 #' @examples
 #' library(tidyverse);library(lubridate)
 #' df <- data.frame(date = rmsfuns::dateconverter(StartDate = lubridate::ymd(20180831), EndDate = lubridate::ymd(20210531), Transform = 'calendarEOM'))
