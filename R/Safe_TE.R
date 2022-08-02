@@ -48,7 +48,7 @@ Safe_TE <- function(Ra, Rb, scale = 12) {
   test <-
     bind_cols(tibble( date1 = index(Ra)),
               tibble( date2 = index(Rb) )
-    ) %>% mutate(Diffcheck = date1-date2) %>% filter(Diffcheck > 0)
+    ) %>% mutate(Diffcheck = abs(date1-date2)) %>% filter(Diffcheck > 0)
 
 
   if(nrow(test) > 0 ) {
