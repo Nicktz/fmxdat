@@ -22,7 +22,7 @@ Depends:
     R (>= 3.2.1)
 License: GPL-3
 LazyData: TRUE
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Repository: CRAN
 NeedsCompilation: yes
 ByteCompile: yes

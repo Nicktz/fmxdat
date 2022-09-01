@@ -34,7 +34,6 @@
 #' @export
 #'
 Safe_TE <- function(Ra, Rb, scale = 12) {
-
   if( !any(grepl("xts", class(Ra)) ) ) Ra <- tbl_xts(Ra)
   if( !any(grepl("xts", class(Rb)) ) ) Rb <- tbl_xts(Rb)
 
@@ -42,8 +41,6 @@ Safe_TE <- function(Ra, Rb, scale = 12) {
     # Naming causes issues:
     names(Rb) <- "SomeRandomNameNotToBeConfused"
   }
-
-  if(length(index(Ra)) != length(index(Rb))) stop("Dates not aligning for Ra and Rb. Please check this.")
 
   test <-
     bind_cols(tibble( date1 = index(Ra)),
@@ -53,6 +50,7 @@ Safe_TE <- function(Ra, Rb, scale = 12) {
 
   if(nrow(test) > 0 ) {
 
+    if(ncol(Rb) > 1 )  stop("I assumed Rb has 1 column as it should be the benchmark.. please check.")
     xdf <- Ra %>% xts_tbl()
     seriesnames <- names(xdf %>% select(-date))
     ydf <- Rb %>% xts_tbl() %>% purrr::set_names(c("date", "BM"))
