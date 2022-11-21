@@ -29,7 +29,7 @@ funds <- fmxdat::asisa \%>\% filter(Funds \%in\% c("Fund_1", "Fund_10")) \%>\% m
 Endate <- ymd(20210430)
 
 # For the past three years, the dates align:
-Ra <- alsi \%>\% filter(date <= Endate) \%>\% filter(date >= RA::safe_month_min(last(date), N = 36)) \%>\% tbl2xts::tbl_xts(cols_to_xts = Returns)
+Ra <- alsi \%>\% filter(date <= Endate) \%>\% filter(date >= fmxdat::safe_month_min(last(date), N = 36)) \%>\% tbl2xts::tbl_xts(cols_to_xts = Returns)
 Rb <- funds \%>\% filter(date <= Endate)   \%>\% filter(date >= fmxdat::safe_month_min(last(date), N = 36)) \%>\% tbl2xts::tbl_xts(cols_to_xts = Returns, spread_by = Funds)
 PerformanceAnalytics::TrackingError(Ra, Rb, scale = 12)
 fmxdat::Safe_TE(Ra, Rb, scale = 12)

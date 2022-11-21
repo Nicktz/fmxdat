@@ -17,7 +17,7 @@
 #'Endate <- ymd(20210430)
 #'
 #'# For the past three years, the dates align:
-#'Ra <- alsi %>% filter(date <= Endate) %>% filter(date >= RA::safe_month_min(last(date), N = 36)) %>% tbl2xts::tbl_xts(cols_to_xts = Returns)
+#'Ra <- alsi %>% filter(date <= Endate) %>% filter(date >= fmxdat::safe_month_min(last(date), N = 36)) %>% tbl2xts::tbl_xts(cols_to_xts = Returns)
 #'Rb <- funds %>% filter(date <= Endate)   %>% filter(date >= fmxdat::safe_month_min(last(date), N = 36)) %>% tbl2xts::tbl_xts(cols_to_xts = Returns, spread_by = Funds)
 #'PerformanceAnalytics::TrackingError(Ra, Rb, scale = 12)
 #'fmxdat::Safe_TE(Ra, Rb, scale = 12)
@@ -34,6 +34,13 @@
 #' @export
 #'
 Safe_TE <- function(Ra, Rb, scale = 12) {
+
+  YM <- function(df) {
+    if(!"date" %in% colnames(df)) stop("...must have a column called 'date'")
+    df %>% mutate(YM = format(date, "%Y%B"))
+  }
+
+
   if( !any(grepl("xts", class(Ra)) ) ) Ra <- tbl_xts(Ra)
   if( !any(grepl("xts", class(Rb)) ) ) Rb <- tbl_xts(Rb)
 
@@ -56,14 +63,14 @@ Safe_TE <- function(Ra, Rb, scale = 12) {
     ydf <- Rb %>% xts_tbl() %>% purrr::set_names(c("date", "BM"))
 
 
-    if( xdf %>% RA::YM() %>% group_by(YM) %>% filter(row_number() > 1) %>% nrow() == 0  && ydf %>% RA::YM() %>% group_by(YM) %>% filter(row_number() > 1) %>% nrow() == 0 ) {
+    if( xdf %>% YM() %>% group_by(YM) %>% filter(row_number() > 1) %>% nrow() == 0  && ydf %>% YM() %>% group_by(YM) %>% filter(row_number() > 1) %>% nrow() == 0 ) {
 
       warning("Dates not aligning - this will produce wrong TE resutls.\nRearranged to have months alligned instead (assuming monthly returns data)...")
 
       transformed <-
         left_join(
-          xdf %>% RA::YM(),
-          ydf %>% RA::YM() %>% select(-date), by = "YM")
+          xdf %>% YM(),
+          ydf %>% YM() %>% select(-date), by = "YM")
 
       xtr <- transformed %>% select(date, all_of(seriesnames)) %>% tbl_xts()
       ytr <- transformed %>% select(date, "BM") %>% tbl_xts()
