@@ -17,6 +17,7 @@ Imports:
     rstudioapi,
     grid,
     scales,
+    lubridate,
     ProjectTemplate
 Depends:
     R (>= 3.2.1)
