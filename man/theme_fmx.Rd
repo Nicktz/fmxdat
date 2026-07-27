@@ -18,6 +18,7 @@ theme_fmx(
   Strip_Col = "#DDE1EE",
   CustomCaption = FALSE,
   CaptionColor = "#606060",
+  CapSize = 25,
   FontType = "sans"
 )
 }

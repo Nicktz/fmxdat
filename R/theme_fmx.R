@@ -14,19 +14,20 @@
 #'
 
 theme_fmx <- function(base.size = 15,
-         title.size = 14,
-         subtitle.size = 12,
-         caption.size = 9,
-         legend.size = 10,
-         axis.size.title = 10,
-         axis.size = 10,
-         strip.size = 10,
-         legend.pos = "bottom",
-         grid_Col = "#F0EFEF",
-         Strip_Col = "#DDE1EE",
-         CustomCaption = FALSE,
-         CaptionColor = "#606060",
-         FontType = "sans") {
+                      title.size = 14,
+                      subtitle.size = 12,
+                      caption.size = 9,
+                      legend.size = 10,
+                      axis.size.title = 10,
+                      axis.size = 10,
+                      strip.size = 10,
+                      legend.pos = "bottom",
+                      grid_Col = "#F0EFEF",
+                      Strip_Col = "#DDE1EE",
+                      CustomCaption = FALSE,
+                      CaptionColor = "#606060",
+                      CapSize = 25,
+                      FontType = "sans") {
 
   safefontload <- purrr::safely(extrafont::loadfonts)
   x <- safefontload(device = "win", quiet = T)
@@ -37,37 +38,11 @@ theme_fmx <- function(base.size = 15,
 
   if(CustomCaption){
 
-    library(grid)
-    element_custom <- function() {
-      structure(list(), class = c("element_custom", "element_text"))
-    }
-
-    element_grob.element_custom <- function(element, label="", ...)  {
-      disect <- strsplit(label, "\\n")[[1]]
-      labels <- lapply(disect, function(x) tryCatch(parse(text=x),
-                                                    error = function(e) x))
-      hl <-  unit(rep(1, length(labels)), 'strheight', data=labels) + unit(0.1,"line")
-      yl <- c(list(unit(0,"line")),
-              lapply(seq_along(labels[-length(labels)]), function(ii) sum(hl[1:ii])))
-
-      cl <- do.call(gList, Map(function(label, ii)
-        textGrob(label, y = unit(1,"npc")-yl[[ii]], hjust=0, x=0, vjust=1),
-        label = labels, ii = seq_along(labels)))
-
-      gTree(children = cl, cl="sl", heights = hl, gp=gpar(col=CaptionColor,fontsize=caption.size))
-    }
-
-    heightDetails.sl <- function(x) sum(x$heights)
-
-
-    .GlobalEnv$element_custom <- element_custom
-    .GlobalEnv$element_grob.element_custom <- element_grob.element_custom
-    .GlobalEnv$heightDetails.sl <- heightDetails.sl
 
     theme_satrix1 <-
       theme_grey() %+replace%
 
-      ggplot2::theme(rect = element_rect(fill = "transparent",
+      ggplot2::theme(rect = element_rect(fill = "white",
                                          colour = NA, color = NA, size = 0, linetype = 0),
                      text = element_text(family = FontType, face = "plain",
                                          colour = "black", size = base.size, lineheight = 0.9,
@@ -109,8 +84,13 @@ theme_fmx <- function(base.size = 15,
                      # Panels:
                      panel.background = ggplot2::element_blank(),
                      strip.background = element_rect(fill = Strip_Col),
+                     strip.clip = "off",
                      strip.text = element_text(face = "bold", colour = "black", size = strip.size),
-                     plot.caption = element_custom())
+                     plot.caption = element_text(
+                       size = ggpts(CapSize),
+                       colour = CaptionColor,
+                       hjust = 0
+                     ))
 
 
   } else {
@@ -118,7 +98,7 @@ theme_fmx <- function(base.size = 15,
     theme_satrix1 <-
       theme_grey() %+replace%
 
-      ggplot2::theme(rect = element_rect(fill = "transparent",
+      ggplot2::theme(rect = element_rect(fill = "white",
                                          colour = NA, color = NA, size = 0, linetype = 0),
                      text = element_text(family = FontType, face = "plain",
                                          colour = "black", size = base.size, lineheight = 0.9,
@@ -159,6 +139,7 @@ theme_fmx <- function(base.size = 15,
 
                      # Panels:
                      panel.background = ggplot2::element_blank(),
+                     strip.clip = "off",
                      strip.background = element_rect(fill = Strip_Col),
                      strip.text = element_text(face = "bold", colour = "black", size = strip.size))
 
